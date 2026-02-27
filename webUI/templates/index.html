@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>SSH Bruteforce Monitor</title>
+  <style>
+    body { font-family: monospace; background: #0b0e14; color: #eaeaea; }
+    .alert { color: #ff4d4d; }
+  </style>
+</head>
+<body>
+<h2>🚨 SSH Bruteforce Alerts (eBPF)</h2>
+<pre id="logs"></pre>
+
+<script>
+async function loadLogs() {
+  const res = await fetch("/api/logs");
+  const data = await res.json();
+  document.getElementById("logs").innerText =
+    data.map(e =>
+      `[${e.time}] ALERT attempts=${e.attempts}`
+    ).join("\n");
+}
+
+setInterval(loadLogs, 3000);
+loadLogs();
+</script>
+</body>
+</html>
