@@ -1,4 +1,5 @@
 #!/bin/bash
+#check the value with the return probe
 bpftrace -e '
 	tracepoint:syscalls:sys_exit_openat
 	/args->ret < 0/
