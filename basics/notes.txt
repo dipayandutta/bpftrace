@@ -1,0 +1,65 @@
+[+] List kernel function 
+-----------------------------
+sudo bpftrace -l 'kprobe:*'
+
+[+] List system call tracepoints
+--------------------------------
+sudo bpftrace -l 'tracepoint:syscalls:*'
+
+[+] List scheduler events
+---------------------------
+sudo bpftrace -l 'tracepoint:sched:*'
+
+[+] Rny Code when any process calls openat()
+---------------------------------------------
+tracepoint:syscalls:sys_enter_openat
+
+
+Meaning
+========
+bpftrace -lv tracepoint:syscalls:sys_enter_openat
+
+tracepoint:syscalls:sys_enter_openat
+    int __syscall_nr
+    int dfd
+    const char * filename
+    int flags
+    umode_t mode
+
+	[+] What is sys_enter_openat?
+			openat() is a system call used to open files.
+			int openat(int dfd, const char *filename, int flags, mode_t mode);
+			Every time any process call openat() , the kernel fires this tracepoint before execution.
+	
+	int __syscall_nr
+		- internal syscall number
+		- indetifies which syscall was invoked
+		- Mostly not useful in bpftrace scripts
+		- Provided for completeness
+
+		{*} almost never use
+
+	int dfd
+		- Directory File Descriptor
+				If filename is relative, it is resolved relative to dfd
+		- common values:
+				AT_FDCWD (usually -100) -> current working directory
+
+	{*} used in sandboxing, containers, secure path handling.
+
+	const char * filename
+		- Pointer to the file path being opened
+		- kernel-space pointer
+		- In bpftrace wrap this as str(args->filename)
+
+	int flags
+		- Bitmask controlling how the file is opened.
+
+	umode_t mode
+		- File permission bits(only used if 0_CREATE)
+		- Example:
+				- 0644
+				- 0755
+
+
+

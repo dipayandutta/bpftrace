@@ -1,0 +1,16 @@
+[*] What is bpftrace ?
+[+] bpftrace is a high level tracing language for eBPF.
+
+Think of it as:
+	awk+tracing+kernel visibility
+
+- Runs safely inside kernel
+- Observes syscalls, kernel functions, tracepoints
+- No kernel modules
+- No reboot
+- No code recompilation
+
+Flow
+----
+Event happens → eBPF program runs → data sent to user-space → printed
+

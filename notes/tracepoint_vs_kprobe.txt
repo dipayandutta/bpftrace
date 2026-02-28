@@ -1,0 +1,4 @@
+[+] tracepoints ==> Kernel-defined events
+[+] kprobes     ==> kernel functions
+
+use tracepoints first, kprobes only when needed.
